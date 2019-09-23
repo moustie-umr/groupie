@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import Auth from './modules/Auth';
+import Home from './modules/Home';
+import Notfound from './modules/Notfound';
+import User from './providers/user';
+
 import './App.css';
 
 function App() {
+  const [url, setUrl] = useState(User.isLoggedIn()? 'home' : 'auth');
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+      <Switch>
+        <Route path="/auth" component={Auth} />
+        <Route path="/home" component={Home} />
+        <Redirect exact from="/" to={`/${url}`} />
+        <Route component={Notfound} />
+      </Switch>
+      </Router>
     </div>
   );
 }
